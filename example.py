@@ -16,6 +16,21 @@ def init_db():
         )
     ''')
     conn.commit()
+
+    # Check if the table is empty
+    c.execute('SELECT COUNT(*) FROM users')
+    if c.fetchone()[0] == 0:
+        # Insert 5 dummy users
+        users = [
+            ('user1', 'user1@example.com', 'password1'),
+            ('user2', 'user2@example.com', 'password2'),
+            ('user3', 'user3@example.com', 'password3'),
+            ('user4', 'user4@example.com', 'password4'),
+            ('user5', 'user5@example.com', 'password5')
+        ]
+        c.executemany('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', users)
+        conn.commit()
+
     conn.close()
 
 init_db()
